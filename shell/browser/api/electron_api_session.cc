@@ -14,11 +14,13 @@
 
 #include "base/command_line.h"
 #include "base/files/file_path.h"
+#include "base/files/file_util.h"
 #include "base/guid.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_util.h"
 #include "base/task/post_task.h"
 #include "chrome/browser/browser_process.h"
+#include "chrome/common/chrome_constants.h"
 #include "chrome/common/pref_names.h"
 #include "components/download/public/common/download_danger_type.h"
 #include "components/download/public/common/download_url_parameters.h"
@@ -112,6 +114,7 @@ struct ClearStorageDataOptions {
   GURL origin;
   uint32_t storage_types = StoragePartition::REMOVE_DATA_MASK_ALL;
   uint32_t quota_types = StoragePartition::QUOTA_MANAGED_STORAGE_MASK_ALL;
+  bool clear_dictionary = true;
 };
 
 uint32_t GetStorageMask(const std::vector<std::string>& storage_types) {
@@ -168,8 +171,13 @@ struct Converter<ClearStorageDataOptions> {
       return false;
     options.Get("origin", &out->origin);
     std::vector<std::string> types;
-    if (options.Get("storages", &types))
+    if (options.Get("storages", &types)) {
       out->storage_types = GetStorageMask(types);
+
+      // no mask for custom dictionary removal
+      if (std::find(types.begin(), types.end(), "dictionary") == types.end())
+        out->clear_dictionary = false;
+    }
     if (options.Get("quotas", &types))
       out->quota_types = GetQuotaMask(types);
     return true;
@@ -378,6 +386,16 @@ v8::Local<v8::Promise> Session::ClearStorageData(gin_helper::Arguments* args) {
     // Reset media device id salt when cookies are cleared.
     // https://w3c.github.io/mediacapture-main/#dom-mediadeviceinfo-deviceid
     MediaDeviceIDSalt::Reset(browser_context()->prefs());
+  }
+
+  if (options.clear_dictionary) {
+    base::FilePath txt_path =
+        browser_context_->GetPath().Append(chrome::kCustomDictionaryFileName);
+    // .backup extension hardcoded in
+    // chrome/browser/spellchecker/spellcheck_custom_dictionary.cc
+    base::FilePath backup_path = txt_path.AddExtension(".backup");
+    base::DeleteFile(txt_path, false);
+    base::DeleteFile(backup_path, false);
   }
 
   storage_partition->ClearData(
