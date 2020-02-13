@@ -261,6 +261,17 @@ describe('session module', () => {
         // trying until it is.
       }
     })
+    it('deletes custom dictionaries', async () => {
+      const ses = session.fromPartition('persist:customdictionary')
+      const options = {
+        storages: ['dictionary'],
+        quotas: ['persistent']
+      }
+      ses.addWordToSpellCheckerDictionary('foo')
+      await ses.clearStorageData(options)
+      const list = await ses.listWordsInSpellCheckerDictionary()
+      expect(list).to.have.length(0)
+    })
   })
 
   describe('will-download event', () => {
