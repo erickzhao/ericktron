@@ -388,15 +388,37 @@ v8::Local<v8::Promise> Session::ClearStorageData(gin_helper::Arguments* args) {
     MediaDeviceIDSalt::Reset(browser_context()->prefs());
   }
 
+#if BUILDFLAG(ENABLE_BUILTIN_SPELLCHECKER)
   if (options.clear_dictionary) {
+    // First clear spellcheck words in memory
+    SpellcheckService* service =
+        SpellcheckServiceFactory::GetForContext(browser_context_.get());
+
+    std::set<std::string> words = service->GetCustomDictionary()->GetWords();
+    for (const std::string& word : words) {
+      Session::RemoveWordFromSpellCheckerDictionary(word);
+    }
+
+    // Delete Custom Dictionary.txt file from disk, including words not
+    // loaded in memory.
+
+    while (service->GetCustomDictionary()->IsSyncing()) {
+      // no-op while syncing
+      LOG(INFO) << "STILL SYNCING PREVIOUS CHANGES!!!!!";
+    }
     base::FilePath txt_path =
         browser_context_->GetPath().Append(chrome::kCustomDictionaryFileName);
     // .backup extension hardcoded in
     // chrome/browser/spellchecker/spellcheck_custom_dictionary.cc
-    base::FilePath backup_path = txt_path.AddExtension(".backup");
-    base::DeleteFile(txt_path, false);
-    base::DeleteFile(backup_path, false);
+    base::FilePath backup_path =
+        txt_path.AddExtension(FILE_PATH_LITERAL(".backup"));
+    bool succ1 = base::DeleteFile(txt_path, false);
+    bool succ2 = base::DeleteFile(backup_path, false);
+
+    LOG(INFO) << "succ1" << (succ1 ? "true" : "false");
+    LOG(INFO) << "succ2" << (succ2 ? "true" : "false");
   }
+#endif
 
   storage_partition->ClearData(
       options.storage_types, options.quota_types, options.origin, base::Time(),
