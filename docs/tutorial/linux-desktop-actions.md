@@ -7,7 +7,7 @@ by modifying the `.desktop` file. For Canonical's Unity documentation, see
 [Adding Shortcuts to a Launcher][unity-launcher]. For details on a more generic
 implementation, see the [freedesktop.org Specification][spec].
 
-![audacious][audacious-launcher]
+![audacious](https://help.ubuntu.com/community/UnityLaunchersAndDesktopFiles?action=AttachFile&do=get&target=shortcuts.png)
 
 > NOTE: The screenshot above is an example of launcher shortcuts in Audacious
 audio player
@@ -41,5 +41,4 @@ parameters. You can find them in your application in the global variable
 `process.argv`.
 
 [unity-launcher]: https://help.ubuntu.com/community/UnityLaunchersAndDesktopFiles#Adding_shortcuts_to_a_launcher
-[audacious-launcher]: https://help.ubuntu.com/community/UnityLaunchersAndDesktopFiles?action=AttachFile&do=get&target=shortcuts.png
 [spec]: https://specifications.freedesktop.org/desktop-entry-spec/1.1/ar01s11.html

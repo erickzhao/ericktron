@@ -35,7 +35,7 @@ You can read more about this feature in [Spectron's documentation][spectron-a11y
 In Devtron, there is an accessibility tab which will allow you to audit a
 page in your app, sort and filter the results.
 
-![devtron screenshot][devtron-screenshot]
+![devtron screenshot](https://cloud.githubusercontent.com/assets/1305617/17156618/9f9bcd72-533f-11e6-880d-389115f40a2a.png)
 
 Both of these tools are using the [Accessibility Developer Tools][a11y-devtools]
 library built by Google for Chrome. You can learn more about the accessibility
@@ -85,7 +85,6 @@ CFStringRef kAXManualAccessibility = CFSTR("AXManualAccessibility");
 ```
 
 [devtron]: https://electronjs.org/devtron
-[devtron-screenshot]: https://cloud.githubusercontent.com/assets/1305617/17156618/9f9bcd72-533f-11e6-880d-389115f40a2a.png
 [spectron]: https://electronjs.org/spectron
 [spectron-a11y]: https://github.com/electron/spectron#accessibility-testing
 [a11y-docs]: https://www.chromium.org/developers/design-documents/accessibility#TOC-How-Chrome-detects-the-presence-of-Assistive-Technology

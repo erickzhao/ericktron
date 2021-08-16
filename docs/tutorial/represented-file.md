@@ -7,7 +7,7 @@ The represented file's icon will be shown in the title bar, and when users
 `Command-Click` or `Control-Click`, a popup with a path to the file will be
 shown.
 
-![Represented File][represented-image]
+![Represented File](https://cloud.githubusercontent.com/assets/639601/5082061/670a949a-6f14-11e4-987a-9aaa04b23c1d.png)
 
 > NOTE: The screenshot above is an example where this feature is used to indicate the currently opened file in the Atom text editor.
 
@@ -57,6 +57,5 @@ In this guide, this is the current user's home directory:
 
 ![Represented file](../images/represented-file.png)
 
-[represented-image]: https://cloud.githubusercontent.com/assets/639601/5082061/670a949a-6f14-11e4-987a-9aaa04b23c1d.png
 [setrepresentedfilename]: ../api/browser-window.md#winsetrepresentedfilenamefilename-macos
 [setdocumentedited]: ../api/browser-window.md#winsetdocumenteditededited-macos
